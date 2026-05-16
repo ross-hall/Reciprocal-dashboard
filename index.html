@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reciprocal Space — Web Apps</title>
+    <style>
+        :root {
+            --navy: #040e6b;
+            --navy-light: #0a1a8f;
+            --navy-dark: #020733;
+            --bg: #fafafa;
+            --card-bg: #ffffff;
+            --text: #1a1a1a;
+            --text-muted: #666666;
+            --border: #e0e0e0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+
+        header {
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(4, 14, 107, 0.08);
+            border-color: var(--navy);
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-url {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            word-break: break-all;
+        }
+
+        .arrow {
+            display: inline-block;
+            margin-left: 0.25rem;
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover .arrow {
+            transform: translateX(3px);
+        }
+
+        footer {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Reciprocal Space</h1>
+            <p class="subtitle">Web apps and tools</p>
+        </header>
+
+        <div class="grid" id="apps-grid"></div>
+
+        <footer>
+            <p>Reciprocal Space</p>
+        </footer>
+    </div>
+
+    <script>
+        // EDIT THIS ARRAY TO ADD, REMOVE, OR CHANGE APPS
+        const apps = [
+            {
+                name: "Pubchem to OBJ",
+                url: "https://ross-hall.github.io/pubchem-to-obj/"
+            },
+            {
+                name: "Graph Vectoriser",
+                url: "https://ross-hall.github.io/Graph-vectoriser/"
+            },
+            {
+                name: "PNG to Lottie",
+                url: "https://ross-hall.github.io/PNGtoLottie/"
+            }
+            // Add more apps here following the same format:
+            // {
+            //     name: "App Name",
+            //     url: "https://example.com/app"
+            // }
+        ];
+
+        // Render the apps grid
+        const grid = document.getElementById('apps-grid');
+        apps.forEach(app => {
+            const card = document.createElement('a');
+            card.className = 'card';
+            card.href = app.url;
+            card.target = '_blank';
+            card.rel = 'noopener noreferrer';
+            
+            card.innerHTML = `
+                <div class="card-title">${app.name}<span class="arrow">→</span></div>
+                <div class="card-url">${app.url}</div>
+            `;
+            
+            grid.appendChild(card);
+        });
+    </script>
+</body>
+</html>
