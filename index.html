@@ -107,6 +107,205 @@
             font-size: 0.875rem;
         }
 
+        .admin-toggle {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--navy);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(4, 14, 107, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .admin-toggle:hover {
+            background: var(--navy-light);
+            transform: scale(1.05);
+        }
+
+        .admin-panel {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .admin-panel.active {
+            display: flex;
+        }
+
+        .admin-content {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .admin-header h2 {
+            font-size: 1.5rem;
+            color: var(--navy);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            color: var(--text);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+            color: var(--text);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.625rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-family: inherit;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--navy);
+        }
+
+        .btn {
+            padding: 0.625rem 1.25rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--navy);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--navy-light);
+        }
+
+        .btn-secondary {
+            background: var(--bg);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: #f0f0f0;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .app-list {
+            margin-top: 2rem;
+        }
+
+        .app-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+        }
+
+        .app-item-info {
+            flex: 1;
+        }
+
+        .app-item-name {
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 0.25rem;
+        }
+
+        .app-item-url {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+            word-break: break-all;
+        }
+
+        .app-item-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.125rem;
+            color: var(--text-muted);
+            padding: 0.25rem;
+        }
+
+        .icon-btn:hover {
+            color: var(--text);
+        }
+
+        .icon-btn.delete:hover {
+            color: #dc3545;
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 2rem 1rem;
@@ -118,6 +317,20 @@
 
             .grid {
                 grid-template-columns: 1fr;
+            }
+
+            .admin-content {
+                padding: 1.5rem;
+            }
+
+            .app-item {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .app-item-actions {
+                width: 100%;
+                justify-content: flex-end;
             }
         }
     </style>
@@ -136,44 +349,169 @@
         </footer>
     </div>
 
+    <!-- Admin Toggle Button -->
+    <button class="admin-toggle" onclick="toggleAdmin()" title="Manage apps">⚙️</button>
+
+    <!-- Admin Panel -->
+    <div class="admin-panel" id="admin-panel">
+        <div class="admin-content">
+            <div class="admin-header">
+                <h2>Manage apps</h2>
+                <button class="close-btn" onclick="toggleAdmin()">×</button>
+            </div>
+
+            <form onsubmit="addApp(event)">
+                <div class="form-group">
+                    <label>App name</label>
+                    <input type="text" id="app-name" placeholder="My web app" required>
+                </div>
+                <div class="form-group">
+                    <label>URL</label>
+                    <input type="url" id="app-url" placeholder="https://example.com" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Add app</button>
+            </form>
+
+            <div class="app-list">
+                <h3 style="font-size: 1rem; margin-bottom: 1rem; color: var(--text);">Current apps</h3>
+                <div id="admin-app-list"></div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // EDIT THIS ARRAY TO ADD, REMOVE, OR CHANGE APPS
-        const apps = [
-            {
-                name: "Pubchem to OBJ",
-                url: "https://ross-hall.github.io/pubchem-to-obj/"
-            },
-            {
-                name: "Graph Vectoriser",
-                url: "https://ross-hall.github.io/Graph-vectoriser/"
-            },
-            {
-                name: "PNG to Lottie",
-                url: "https://ross-hall.github.io/PNGtoLottie/"
+        // Initialize apps from localStorage or use defaults
+        function getApps() {
+            const stored = localStorage.getItem('reciprocal-apps');
+            if (stored) {
+                return JSON.parse(stored);
             }
-            // Add more apps here following the same format:
-            // {
-            //     name: "App Name",
-            //     url: "https://example.com/app"
-            // }
-        ];
+            // Default apps on first load
+            return [
+                {
+                    name: "Pubchem to OBJ",
+                    url: "https://ross-hall.github.io/pubchem-to-obj/"
+                },
+                {
+                    name: "Graph Vectoriser",
+                    url: "https://ross-hall.github.io/Graph-vectoriser/"
+                },
+                {
+                    name: "PNG to Lottie",
+                    url: "https://ross-hall.github.io/PNGtoLottie/"
+                }
+            ];
+        }
+
+        function saveApps(apps) {
+            localStorage.setItem('reciprocal-apps', JSON.stringify(apps));
+        }
 
         // Render the apps grid
-        const grid = document.getElementById('apps-grid');
-        apps.forEach(app => {
-            const card = document.createElement('a');
-            card.className = 'card';
-            card.href = app.url;
-            card.target = '_blank';
-            card.rel = 'noopener noreferrer';
+        function renderApps() {
+            const grid = document.getElementById('apps-grid');
+            const apps = getApps();
+            grid.innerHTML = '';
             
-            card.innerHTML = `
-                <div class="card-title">${app.name}<span class="arrow">→</span></div>
-                <div class="card-url">${app.url}</div>
-            `;
+            apps.forEach(app => {
+                const card = document.createElement('a');
+                card.className = 'card';
+                card.href = app.url;
+                card.target = '_blank';
+                card.rel = 'noopener noreferrer';
+                
+                card.innerHTML = `
+                    <div class="card-title">${escapeHtml(app.name)}<span class="arrow">→</span></div>
+                    <div class="card-url">${escapeHtml(app.url)}</div>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+
+        // Render admin app list
+        function renderAdminList() {
+            const list = document.getElementById('admin-app-list');
+            const apps = getApps();
+            list.innerHTML = '';
             
-            grid.appendChild(card);
+            if (apps.length === 0) {
+                list.innerHTML = '<p style="color: var(--text-muted); font-size: 0.875rem;">No apps yet. Add one above.</p>';
+                return;
+            }
+            
+            apps.forEach((app, index) => {
+                const item = document.createElement('div');
+                item.className = 'app-item';
+                item.innerHTML = `
+                    <div class="app-item-info">
+                        <div class="app-item-name">${escapeHtml(app.name)}</div>
+                        <div class="app-item-url">${escapeHtml(app.url)}</div>
+                    </div>
+                    <div class="app-item-actions">
+                        <button class="icon-btn delete" onclick="deleteApp(${index})" title="Delete">🗑️</button>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        // Add new app
+        function addApp(event) {
+            event.preventDefault();
+            const name = document.getElementById('app-name').value.trim();
+            const url = document.getElementById('app-url').value.trim();
+            
+            const apps = getApps();
+            apps.push({ name, url });
+            saveApps(apps);
+            
+            // Clear form
+            document.getElementById('app-name').value = '';
+            document.getElementById('app-url').value = '';
+            
+            // Re-render both views
+            renderApps();
+            renderAdminList();
+        }
+
+        // Delete app
+        function deleteApp(index) {
+            if (!confirm('Delete this app?')) return;
+            
+            const apps = getApps();
+            apps.splice(index, 1);
+            saveApps(apps);
+            
+            renderApps();
+            renderAdminList();
+        }
+
+        // Toggle admin panel
+        function toggleAdmin() {
+            const panel = document.getElementById('admin-panel');
+            panel.classList.toggle('active');
+            if (panel.classList.contains('active')) {
+                renderAdminList();
+            }
+        }
+
+        // Close admin panel when clicking outside
+        document.getElementById('admin-panel').addEventListener('click', function(e) {
+            if (e.target === this) {
+                toggleAdmin();
+            }
         });
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Initial render
+        renderApps();
     </script>
 </body>
 </html>
